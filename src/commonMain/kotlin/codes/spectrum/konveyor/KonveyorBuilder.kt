@@ -18,12 +18,12 @@ open class KonveyorBuilder<T> {
         handlers.add(handler)
     }
 
-//    fun konveyor(block: KonveyorBuilder<T>.() -> Unit) {
-//        val builder = KonveyorBuilder<T>()
-//        builder.block()
-//        val handler = builder.build()
-//        handlers.add(handler)
-//    }
+    fun konveyor(block: KonveyorBuilder<T>.() -> Unit) {
+        val builder = KonveyorBuilder<T>()
+        builder.block()
+        val handler = builder.build()
+        handlers.add(handler)
+    }
 
     fun <S> subKonveyor(block: SubKonveyorBuilder<T, S>.() -> Unit) {
         val builder = SubKonveyorBuilder<T, S>()

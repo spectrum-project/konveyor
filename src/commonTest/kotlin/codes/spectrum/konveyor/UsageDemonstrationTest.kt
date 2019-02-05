@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 class UsageDemonstrationTest {
 
     @Test
-    fun createExecTest() {
+    fun execTest() {
         val myContext = MyContext(id = "1", value = 1)
         val conveyor = konveyor<MyContext> {
             exec {
@@ -21,7 +21,7 @@ class UsageDemonstrationTest {
     }
 
     @Test
-    fun createHandlerTest() {
+    fun handlerTest() {
         val myContext1 = MyContext(id = "1", value = 1)
         val myContext2 = MyContext(id = "2", value = 1)
         val conveyor = konveyor<MyContext> {
@@ -44,7 +44,7 @@ class UsageDemonstrationTest {
     }
 
     @Test
-    fun createSuperKonveyorTest() {
+    fun subKonveyorTest() {
         val myContext = MyContext(id = "1", value = 1, list = mutableListOf(12L, 13L, 14L))
         val conveyor = konveyor<MyContext> {
             subKonveyor<MySubContext> {
@@ -71,6 +71,32 @@ class UsageDemonstrationTest {
         runMultiplatformBlocking { conveyor.exec(myContext) }
 
         assertEquals(79, myContext.value)
+
+    }
+
+    @Test
+    fun konveyorTest() {
+        val myContext = MyContext(id = "1", value = 1)
+        val conveyor = konveyor<MyContext> {
+            exec { value = 12 }
+            konveyor {
+                exec {
+                    value*=2
+                }
+                handler {
+                    on { value <= 10 }
+                    exec { value *= 4 }
+                }
+                handler {
+                    on { value > 10 }
+                    exec { value /= 4 }
+                }
+            }
+        }
+
+        runMultiplatformBlocking { conveyor.exec(myContext) }
+
+        assertEquals(6, myContext.value)
 
     }
 
