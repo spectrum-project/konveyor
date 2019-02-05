@@ -3,7 +3,7 @@ package codes.spectrum.konveyor
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class UsageDemonstrationTest {
+class konveyorBuilderTest {
 
     @Test
     fun execTest() {
