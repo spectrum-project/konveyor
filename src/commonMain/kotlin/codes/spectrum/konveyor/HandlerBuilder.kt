@@ -27,7 +27,7 @@ class HandlerBuilder<T> {
     /**
      * Builds the [[IKonveyorHandler]] implementation
      */
-    fun build() = KonveyorWrapperHandler<T>(
+    fun build() = KonveyorHandlerWrapper<T>(
         matcher = matcher,
         executor = executor
     )

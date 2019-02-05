@@ -1,13 +1,17 @@
 package codes.spectrum.konveyor
 
-class Konveyor<T>(
+/**
+ * Main Konveyor class that includes all workflow of the konveyor
+ */
+open class Konveyor<T>(
     private val handlers: List<IKonveyorHandler<T>> = listOf()
-) {
-    suspend fun process(context: T) {
+): IKonveyorHandler<T> {
+    override fun match(context: T): Boolean = true
+
+    override suspend fun exec(context: T) {
         handlers.forEach {
             if (it.match(context)) it.exec(context)
         }
     }
-//    expect fun proces(context: T)
 }
 
