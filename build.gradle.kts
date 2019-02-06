@@ -1,6 +1,8 @@
 import com.jfrog.bintray.gradle.BintrayExtension
 import com.jfrog.bintray.gradle.tasks.BintrayUploadTask
 import java.util.*
+import java.time.*
+import java.time.format.DateTimeFormatter
 
 buildscript {
     repositories {
@@ -13,7 +15,9 @@ plugins {
     kotlin("multiplatform") version "1.3.20"
     `maven-publish`
     id("com.jfrog.bintray") version "1.8.4"
+//    id("com.jfrog.artifactory") version "4.9.0"
     id("maven-publish")
+    id("net.nemerosa.versioning") version "2.8.2"
     jacoco
     id("org.jetbrains.dokka") version "0.9.17"
     maven
@@ -98,16 +102,33 @@ kotlin {
 
                 sourceDirs = main.defaultSourceSet.kotlin
 
-//                sourceDirs = listOf(
-//                    "src/commonMain/kotlin",
-//                    "src/jvmMain/kotlin"
-//                ).map { projectDir.resolve(it) }
+            }
 
-//        samples = listOf("src/samples/java", "src/samples/kotlin")
+            val jvmJar by getting(Jar::class) {
+                manifest {
+                    val buildTimeAndDate = OffsetDateTime.now()
+//                    var generateManifest by extra(false)
+                    val buildDate by extra { DateTimeFormatter.ISO_LOCAL_DATE.format(buildTimeAndDate) }
+                    val buildTime by extra { DateTimeFormatter.ofPattern("HH:mm:ss.SSSZ").format(buildTimeAndDate) }
+                    val buildRevision by extra { versioning.info.commit }
+                    val builtByValue by extra { project.findProperty("builtBy") ?: project.property("defaultBuiltBy") }
 
-//        includes = projectDir.resolve("src/main/docs").walkTopDown()
-//            .filter { it.isFile }
-//            .toList()
+                    attributes(
+                        mutableMapOf(
+                            "Created-By" to "${System.getProperty("java.version")} (${System.getProperty("java.vendor")} ${System.getProperty("java.vm.version")})",
+                            "Built-By" to builtByValue,
+                            "Build-Date" to buildDate,
+                            "Build-Time" to buildTime,
+                            "Build-Revision" to buildRevision,
+                            "Specification-Title" to project.name,
+                            "Specification-Version" to project.version as String,
+                            "Specification-Vendor" to "Spectrum-Project",
+                            "Implementation-Title" to project.name,
+                            "Implementation-Version" to project.version,
+                            "Implementation-Vendor" to "Spectrum-Project"
+                        )
+                    )
+                }
             }
 
             val dokkaJar by creating(Jar::class) {
@@ -223,10 +244,6 @@ kotlin {
                         this.name = project.version.toString()
                         released = Date().toString()
                     })
-//            artifacts{
-//                add("source", sourcesJar)
-//                add(dokkaJar)
-//            }
                 })
             }
 
