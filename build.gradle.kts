@@ -1,10 +1,11 @@
 import com.jfrog.bintray.gradle.BintrayExtension
 import com.jfrog.bintray.gradle.tasks.BintrayUploadTask
 import groovy.lang.GroovyObject
+import org.jfrog.gradle.plugin.artifactory.dsl.DoubleDelegateWrapper
 import org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig
-import java.util.*
-import java.time.*
+import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 buildscript {
     repositories {
@@ -224,21 +225,17 @@ kotlin {
                     setContextUrl("https://oss.jfrog.org/artifactory")
                     //The base Artifactory URL if not overridden by the publisher/resolver
                     publish(delegateClosureOf<PublisherConfig> {
-                        repository(delegateClosureOf<GroovyObject> {
-
-                            setProperty("repoKey", "oss-snapshot-local")
-                            setProperty("username", bintrayUsername)
-                            setProperty("password", bintrayApiKey)
-                            setProperty("maven", true)
-//                            setProperty("buildInfo", false)
+                        repository(delegateClosureOf<DoubleDelegateWrapper> {
+                            invokeMethod("setRepoKey", "oss-snapshot-local")
+                            invokeMethod("setUsername", bintrayUsername)
+                            invokeMethod("setPassword", bintrayApiKey)
+                            invokeMethod("setMavenCompatible", true)
+                            invokeMethod("setPublishBuildInfo", false)
                         })
 
-                        defaults (delegateClosureOf<GroovyObject> {
+                        defaults(delegateClosureOf<GroovyObject> {
                             invokeMethod("publications", "mavenJava")
-//                            setProperty("", false)
-                            methodMissing("setPublishBuildInfo", false)
                         })
-
                     })
                 }
                 publish {
