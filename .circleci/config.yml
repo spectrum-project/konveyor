@@ -51,7 +51,6 @@ jobs:
 
       - run: gradle build
       - run: gradle check
-      - run: gradle publish
       - codecov/upload:
           file: build/reports/jacoco/report.xml
 
