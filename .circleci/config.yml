@@ -63,6 +63,9 @@ jobs:
           key: v2-dependencies-{{ checksum "build.gradle.kts" }}
 
   publish:
+    branch:
+      - master
+      - dev
     # restore defaults named 'workdirAndImage'
     <<: *workdirAndImage
     # override working directory (its defined as ~/workspace in 'workdirAndImage'), we want work on checked out code
@@ -128,10 +131,6 @@ workflows:
             - checkout_code
 
       - publish:
-          branches:
-            only:
-              - master
-              - dev
           requires:
             - checkout_code
             - build
