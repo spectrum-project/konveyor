@@ -62,9 +62,33 @@ jobs:
             - ~/.m2
           key: v2-dependencies-{{ checksum "build.gradle.kts" }}
 
-#      - codecov/upload:
-#          file: build/reports/jacoco/report.xml
+  publish:
+    # restore defaults named 'workdirAndImage'
+    <<: *workdirAndImage
+    # override working directory (its defined as ~/workspace in 'workdirAndImage'), we want work on checked out code
+    working_directory: ~/workspace/repo
 
+    steps:
+      # restore workspace - in checkout_code step we persisted checked out code under ~/workspace/repo
+      - attach_workspace:
+          at: ~/workspace
+      # restore cache (saving it is at the end of this job), it contains downloaded dependencies + build artifacts.
+      - restore_cache:
+          keys:
+            # this key relates to build.gradle. If this file has not been changed since the last build, cache will be used
+            # {{ checksum "build.gradle" }} simply tells Circle CI to calculate checksum from build.gradle
+            - v2-dependencies-{{ checksum "build.gradle.kts" }}
+            # fallback to using the latest cache if no exact match is found
+            - v2-dependencies-
+
+      - run: gradle publish
+
+      # after performing build lets store dependencies and build artifacts
+      - save_cache:
+          paths:
+            - ~/.gradle
+            - ~/.m2
+          key: v2-dependencies-{{ checksum "build.gradle.kts" }}
 
   push_docker_image:
     <<: *workdirAndImage
@@ -102,6 +126,15 @@ workflows:
       - build:
           requires:
             - checkout_code
+
+      - publish:
+          branches:
+            only:
+              - master
+              - dev
+          requires:
+            - checkout_code
+            - build
 
       # run tests after build
 #      - test:
