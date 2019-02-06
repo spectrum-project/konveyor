@@ -62,6 +62,12 @@ tasks {
 kotlin {
     jvm {
         val main by compilations.getting {
+
+            compileKotlinTask // get the Kotlin task 'compileKotlinJvm'
+            output // get the main compilation output
+        }
+
+        val test by compilations.getting {
             kotlinOptions {
                 // Setup the Kotlin compiler options for the 'main' compilation:
                 jvmTarget = "1.8"
