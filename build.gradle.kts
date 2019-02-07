@@ -15,7 +15,7 @@ buildscript {
 }
 
 plugins {
-    kotlin("multiplatform") version "1.3.20"
+    kotlin("multiplatform") version "1.3.21"
     `maven-publish`
     id("com.jfrog.bintray") version "1.8.4"
     id("com.jfrog.artifactory") version "4.9.0"
@@ -314,7 +314,7 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations"))
+//                implementation(kotlin("test-annotations"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.1.1")
             }
         }
