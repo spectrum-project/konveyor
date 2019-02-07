@@ -77,6 +77,20 @@ class konveyorBuilderTest {
     }
 
     @Test
+    fun emptySubKonveyorTest() {
+        val myContext = MyContext(id = "1", value = 1, list = mutableListOf(12L, 13L, 14L))
+        val conveyor = konveyor<MyContext> {
+            subKonveyor<MySubContext> {
+            }
+        }
+
+        runMultiplatformBlocking { conveyor.exec(myContext) }
+
+        assertEquals(1, myContext.value)
+
+    }
+
+    @Test
     fun konveyorTest() {
         val myContext = MyContext(id = "1", value = 1)
         val conveyor = konveyor<MyContext> {
