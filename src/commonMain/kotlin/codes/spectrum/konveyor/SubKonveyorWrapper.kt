@@ -5,18 +5,19 @@ package codes.spectrum.konveyor
  */
 class SubKonveyorWrapper<T, S>(
     private val subKonveyor: Konveyor<S> = Konveyor(),
-    private val splitter: suspend T.() -> Iterable<S> = { listOf<S>() },
-    private val joiner: suspend T.(joining: S) -> Unit = { }
+    private val splitter: SubKonveyorSplitterType<T, S> = { sequence { } },
+    private val joiner: SubKonveyorJoinerType<T, S> = { _: S, _: IKonveyorEnvironment -> }
 ): IKonveyorHandler<T> {
 
-    override fun match(context: T): Boolean = true
+    override fun match(context: T, env: IKonveyorEnvironment): Boolean = true
 
-    override suspend fun exec(context: T) {
+    override suspend fun exec(context: T, env: IKonveyorEnvironment) {
+        fun T.getKonveyorEnv() = env
         context
-            .splitter()
+            .splitter(env)
             .forEach {
-                subKonveyor.exec(it)
-                context.joiner(it)
+                subKonveyor.exec(it, env)
+                context.joiner(it, env)
             }
     }
 }

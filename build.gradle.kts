@@ -329,6 +329,9 @@ kotlin {
                 implementation(kotlin("test"))
                 implementation(kotlin("test-junit"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1")
+                implementation("org.junit.jupiter:junit-jupiter-api:5.3.2")
+                implementation("org.junit.jupiter:junit-jupiter-params:5.3.2")
+                implementation("org.junit.jupiter:junit-jupiter-engine:5.3.2")
             }
         }
 //        val jsMain by getting {

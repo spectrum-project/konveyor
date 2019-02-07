@@ -10,7 +10,7 @@ class konveyorBuilderTest {
         val myContext = MyContext(id = "1", value = 1)
         val conveyor = konveyor<MyContext> {
             exec {
-                value ++
+                value++
             }
         }
 
@@ -30,7 +30,7 @@ class konveyorBuilderTest {
                     id == "1"
                 }
                 exec {
-                    value ++
+                    value++
                 }
             }
         }
@@ -50,16 +50,18 @@ class konveyorBuilderTest {
             subKonveyor<MySubContext> {
 
                 split {
-                    list.map {
-                        MySubContext(
-                            subId = it.toString(),
-                            subValue = it
-                        )
-                    }
+                    list
+                        .map {
+                            MySubContext(
+                                subId = it.toString(),
+                                subValue = it
+                            )
+                        }
+                        .asSequence()
                 }
 
                 exec {
-                    subValue*=2
+                    subValue *= 2
                 }
 
                 join { joining: MySubContext ->
@@ -81,7 +83,7 @@ class konveyorBuilderTest {
             exec { value = 12 }
             konveyor {
                 exec {
-                    value*=2
+                    value *= 2
                 }
                 handler {
                     on { value <= 10 }

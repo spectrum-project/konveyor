@@ -6,11 +6,11 @@ package codes.spectrum.konveyor
 open class Konveyor<T>(
     private val handlers: List<IKonveyorHandler<T>> = listOf()
 ): IKonveyorHandler<T> {
-    override fun match(context: T): Boolean = true
+    override fun match(context: T, env: IKonveyorEnvironment): Boolean = true
 
-    override suspend fun exec(context: T) {
+    override suspend fun exec(context: T, env: IKonveyorEnvironment) {
         handlers.forEach {
-            if (it.match(context)) it.exec(context)
+            if (it.match(context, env)) it.exec(context, env)
         }
     }
 }

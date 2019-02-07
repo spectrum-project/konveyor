@@ -1,13 +1,19 @@
 package codes.spectrum.konveyor
 
 @KonveyorTagMarker
-open class KonveyorBuilder<T> {
+open class KonveyorBuilder<T>: HandlerBuilder<T>() {
 
     val handlers: MutableList<IKonveyorHandler<T>> = mutableListOf()
 
-    open fun build(): Konveyor<T> = Konveyor(handlers)
+    override fun build(): Konveyor<T> = Konveyor(handlers)
 
-    fun exec(block: suspend T.() -> Unit) {
+    override fun exec(block: KonveyorExecutorShortType<T>) {
+        execEnv {
+            block()
+        }
+    }
+
+    override fun execEnv(block: KonveyorExecutorType<T>) {
         handlers.add(KonveyorHandlerWrapper(executor = block))
     }
 
@@ -31,4 +37,5 @@ open class KonveyorBuilder<T> {
         val handler = builder.buildNew()
         handlers.add(handler)
     }
+
 }

@@ -1,10 +1,10 @@
 package codes.spectrum.konveyor
 
 class KonveyorHandlerWrapper<T>(
-    private val matcher: T.() -> Boolean = { true },
-    private val executor: suspend T.() -> Unit = {}
+    private val matcher: KonveyorMatcherType<T> = { true },
+    private val executor: KonveyorExecutorType<T> = {}
 ): IKonveyorHandler<T> {
 
-    override fun match(context: T): Boolean = context.matcher()
-    override suspend fun exec(context: T) = context.executor()
+    override fun match(context: T, env: IKonveyorEnvironment): Boolean = context.matcher(env)
+    override suspend fun exec(context: T, env: IKonveyorEnvironment) = context.executor(env)
 }
