@@ -40,6 +40,7 @@ typealias KonveyorExecutorType<T> = suspend T.(IKonveyorEnvironment) -> Unit
 typealias KonveyorMatcherType<T> = T.(IKonveyorEnvironment) -> Boolean
 typealias KonveyorExecutorShortType<T> = suspend T.() -> Unit
 typealias KonveyorMatcherShortType<T> = T.() -> Boolean
+typealias KonveyorTimeoutType = () -> Long
 
 typealias SubKonveyorJoinerType<T, S> = suspend T.(joining: S, env: IKonveyorEnvironment) -> Unit
 typealias SubKonveyorSplitterType<T, S> = suspend T.(env: IKonveyorEnvironment) -> Sequence<S>

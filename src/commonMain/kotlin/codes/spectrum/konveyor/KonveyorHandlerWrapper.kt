@@ -16,11 +16,22 @@
  */
 package codes.spectrum.konveyor
 
+import kotlinx.coroutines.withTimeout
+
 class KonveyorHandlerWrapper<T>(
     private val matcher: KonveyorMatcherType<T> = { true },
-    private val executor: KonveyorExecutorType<T>
+    private val executor: KonveyorExecutorType<T>,
+    private val timeout: Long = 0L
 ): IKonveyorHandler<T> {
 
     override fun match(context: T, env: IKonveyorEnvironment): Boolean = context.matcher(env)
-    override suspend fun exec(context: T, env: IKonveyorEnvironment) = context.executor(env)
+    override suspend fun exec(context: T, env: IKonveyorEnvironment) {
+        if (timeout > 0L) {
+            withTimeout(timeout) {
+                context.executor(env)
+            }
+        } else {
+            context.executor(env)
+        }
+    }
 }

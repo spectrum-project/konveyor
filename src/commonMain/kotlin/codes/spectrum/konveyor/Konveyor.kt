@@ -16,18 +16,29 @@
  */
 package codes.spectrum.konveyor
 
+import kotlinx.coroutines.withTimeout
+
 /**
  * Main Konveyor class that includes all workflow of the konveyor
  */
 open class Konveyor<T>(
     private val matcher: KonveyorMatcherType<T> = { true },
-    private val handlers: List<IKonveyorHandler<T>> = listOf()
+    private val handlers: List<IKonveyorHandler<T>> = listOf(),
+    private val timeout: Long = 0L
 ): IKonveyorHandler<T> {
     override fun match(context: T, env: IKonveyorEnvironment): Boolean = context.matcher(env)
 
     override suspend fun exec(context: T, env: IKonveyorEnvironment) {
-        handlers.forEach {
-            if (it.match(context, env)) it.exec(context, env)
+        if (timeout > 0L) {
+            withTimeout(timeout) {
+                handlers.forEach {
+                    if (it.match(context, env)) it.exec(context, env)
+                }
+            }
+        } else {
+            handlers.forEach {
+                if (it.match(context, env)) it.exec(context, env)
+            }
         }
     }
 }

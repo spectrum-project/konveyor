@@ -21,7 +21,7 @@ open class KonveyorBuilder<T: Any>: HandlerBuilder<T>() {
 
     private val handlers: MutableList<IKonveyorHandler<T>> = mutableListOf()
 
-    override fun build(): Konveyor<T> = Konveyor(matcher = matcher, handlers = handlers)
+    override fun build(): Konveyor<T> = Konveyor(matcher = matcher, handlers = handlers, timeout = timeout)
 
     override fun exec(block: KonveyorExecutorShortType<T>) {
         execEnv {
