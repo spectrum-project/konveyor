@@ -16,7 +16,7 @@
  */
 package codes.spectrum.konveyor
 
-interface IBaseBuilder<T> {
+interface IBaseBuilder<T: Any> {
     /**
      * With this methos one can set the lambda for matcher [[IKonveyorHandler.match]] to the handler
      */
@@ -30,6 +30,15 @@ interface IBaseBuilder<T> {
      */
     fun onEnv(block: KonveyorMatcherType<T>)
 
+    /**
+     * Set up timeout for handlers and conveyors
+     */
+    fun timeout(block: KonveyorTimeoutType)
+
     fun build(): IKonveyorHandler<T>
 
+    operator fun invoke(block: (IBaseBuilder<T>) -> Unit): IBaseBuilder<T> {
+        block(this)
+        return this
+    }
 }

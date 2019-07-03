@@ -27,17 +27,17 @@ interface IHandlerContainerBuilder<T: Any> {
     fun add(handler: KonveyorExecutorShortType<T>) = add(HandlerBuilder<T>().apply {
         exec(handler)
     })
-    fun add(handler: KCallable<T>) = add(HandlerBuilder<T>().apply {
-        execEnv { env ->
-            handler.call(this, env)
-        }
-    })
+//    fun add(handler: KCallable<T>) = add(HandlerBuilder<T>().apply {
+//        execEnv { env ->
+//            handler.call(this, env)
+//        }
+//    })
 
     operator fun IKonveyorHandler<T>.unaryPlus() = this@IHandlerContainerBuilder.add(this)
-    operator fun IHandlerBuilder<T>.unaryPlus() = this@IHandlerContainerBuilder.add(this)
-    operator fun KonveyorExecutorType<T>.unaryPlus() = this@IHandlerContainerBuilder.add(this)
-    operator fun KonveyorExecutorShortType<T>.unaryPlus() = this@IHandlerContainerBuilder.add(this)
-    operator fun KCallable<T>.unaryPlus() = this@IHandlerContainerBuilder.add(this)
+    operator fun IBaseBuilder<T>.unaryPlus() = this@IHandlerContainerBuilder.add(this)
+//    operator fun KonveyorExecutorType<T>.unaryPlus() = this@IHandlerContainerBuilder.add(this)
+//    operator fun KonveyorExecutorShortType<T>.unaryPlus() = this@IHandlerContainerBuilder.add(this)
+//    operator fun KCallable<T>.unaryPlus() = this@IHandlerContainerBuilder.add(this)
 
     fun handler(block: HandlerBuilder<T>.() -> Unit) {
         val builder = HandlerBuilder<T>()

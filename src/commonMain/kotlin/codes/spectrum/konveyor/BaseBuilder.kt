@@ -23,7 +23,7 @@ import kotlinx.coroutines.TimeoutCancellationException
  *
  */
 @KonveyorTagMarker
-abstract class BaseBuilder<T>: IBaseBuilder<T> {
+abstract class BaseBuilder<T: Any>: IBaseBuilder<T> {
 
     protected var matcher: KonveyorMatcherType<T> = { true }
     protected var timeout: Long = 0L
@@ -39,7 +39,7 @@ abstract class BaseBuilder<T>: IBaseBuilder<T> {
     /**
      * With this methods one can set timeout in millisecond([[Long]]) for handler and throw [[TimeoutCancellationException]] if time out
      */
-    fun timeout(block: KonveyorTimeoutType) {
+    override fun timeout(block: KonveyorTimeoutType) {
         timeout = block()
     }
 

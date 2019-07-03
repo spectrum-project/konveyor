@@ -204,29 +204,6 @@ class konveyorBuilderTest {
         assertEquals(4001, myContext.value)
     }
 
-    @Test
-    fun timeoutOkTest() {
-        val myContext = MyContext()
-        val timeoutKonveyor = konveyor<MyContext> {
-            timeout { 1000 }
-            exec { delay(100) }
-        }
-
-        runMultiplatformBlocking { timeoutKonveyor.exec(myContext) }
-    }
-
-    @Test
-    fun timeoutCancelTest() {
-        val myContext = MyContext()
-        val timeoutKonveyor = konveyor<MyContext> {
-            timeout { 100 }
-            exec { delay(1000) }
-        }
-        assertFailsWith<TimeoutCancellationException> {
-            runMultiplatformBlocking { timeoutKonveyor.exec(myContext) }
-        }
-    }
-
     internal data class MyContext(
         var id: String = "",
         var value: Int = 0,
