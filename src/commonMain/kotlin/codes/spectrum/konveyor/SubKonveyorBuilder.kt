@@ -20,39 +20,23 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 
 @KonveyorTagMarker
-class SubKonveyorBuilder<T: Any,S: Any>: KonveyorBuilder<S>() {
-
-    protected var matcherT: KonveyorMatcherType<T> = { true }
+class SubKonveyorBuilder<T: Any,S: Any>: BaseBuilder<T>(), IHandlerContainerBuilder<S> {
     private var splitter: SubKonveyorSplitterType<T, S> = { sequence {  } }
     private var joiner: SubKonveyorJoinerType<T, S> = { _: S, _: IKonveyorEnvironment -> }
     private var contexter: SubKonveyorCoroutineContextType<T> = { EmptyCoroutineContext }
     private var bufferSizer: SubKonveyorCoroutineBufferSize<T> = { 1 }
     private var consumer: SubKonveyorCoroutineConsumer<T> = { 1 }
+    private var handlers: MutableList<IKonveyorHandler<S>> = mutableListOf()
 
-    fun buildNew(): SubKonveyorWrapper<T, S> = SubKonveyorWrapper(
-        matcher = matcherT,
-        subKonveyor = build(),
+    override fun build(): SubKonveyorWrapper<T, S> = SubKonveyorWrapper(
+        matcher = matcher,
+        handlers = handlers,
         splitter = splitter,
         joiner = joiner,
         bufferSizer = bufferSizer,
         contexter = contexter,
         consumer = consumer
     )
-
-//    /**
-//     * With this methos one can set the lambda for matcher [[IKonveyorHandler.match]] to the handler
-//     */
-//    fun on(block: KonveyorMatcherShortType<T>) {
-//        onEnv(block = { block() } as KonveyorMatcherType<T>)
-//    }
-
-//    /**
-//     * With this methos one can set the lambda for matcher [[IKonveyorHandler.match]] having access to
-//     * [[IKonveyorEnvironment]] through lambda parameter to the handler
-//     */
-//    fun onEnv(block: KonveyorMatcherType<T>) {
-//        matcherT = block
-//    }
 
     fun bufferSize(block: SubKonveyorCoroutineBufferSize<T>) { bufferSizer = block}
     fun coroutineContext(block: SubKonveyorCoroutineContextType<T>) { contexter = block}
@@ -76,6 +60,20 @@ class SubKonveyorBuilder<T: Any,S: Any>: KonveyorBuilder<S>() {
 
     fun joinEnv(block: SubKonveyorJoinerType<T, S>) {
         joiner = block
+    }
+
+    override fun add(handler: IKonveyorHandler<S>) {
+        handlers.add(handler)
+    }
+
+    fun exec(block: KonveyorExecutorShortType<S>) {
+        execEnv {
+            block()
+        }
+    }
+
+    fun execEnv(block: KonveyorExecutorType<S>) {
+        add(block)
     }
 
 }

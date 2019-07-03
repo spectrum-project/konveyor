@@ -17,47 +17,47 @@
 package codes.spectrum.konveyor
 
 @KonveyorTagMarker
-open class KonveyorBuilder<T: Any>: HandlerBuilder<T>() {
+open class KonveyorBuilder<T: Any>: BaseBuilder<T>(), IKonveyorBuilder<T> {
 
     private val handlers: MutableList<IKonveyorHandler<T>> = mutableListOf()
 
     override fun build(): Konveyor<T> = Konveyor(matcher = matcher, handlers = handlers, timeout = timeout)
 
-    override fun exec(block: KonveyorExecutorShortType<T>) {
+//    fun handler(block: HandlerBuilder<T>.() -> Unit) {
+//        val builder = HandlerBuilder<T>()
+//        builder.block()
+//        val handler = builder.build()
+//        handlers.add(handler)
+//    }
+//
+    override fun add(handler: IKonveyorHandler<T>) {
+        println("ADD: handler")
+        handlers.add(handler)
+    }
+
+    fun exec(block: KonveyorExecutorShortType<T>) {
         execEnv {
             block()
         }
     }
 
-    override fun execEnv(block: KonveyorExecutorType<T>) {
+    fun execEnv(block: KonveyorExecutorType<T>) {
         handlers.add(KonveyorHandlerWrapper(executor = block))
     }
 
-    fun handler(block: HandlerBuilder<T>.() -> Unit) {
-        val builder = HandlerBuilder<T>()
-        builder.block()
-        val handler = builder.build()
-        handlers.add(handler)
-    }
+//    fun konveyor(block: KonveyorBuilder<T>.() -> Unit) {
+//        val builder = KonveyorBuilder<T>()
+//        builder.block()
+//        val handler = builder.build()
+//        add(handler)
+//    }
 
-    fun add(handler: IKonveyorHandler<T>) {
-        handlers.add(handler)
-    }
-
-    operator fun IKonveyorHandler<T>.unaryPlus() = this@KonveyorBuilder.add(this)
-
-    fun konveyor(block: KonveyorBuilder<T>.() -> Unit) {
-        val builder = KonveyorBuilder<T>()
-        builder.block()
-        val handler = builder.build()
-        handlers.add(handler)
-    }
-
-    fun <S: Any> subKonveyor(block: SubKonveyorBuilder<T, S>.() -> Unit) {
-        val builder = SubKonveyorBuilder<T, S>()
-        builder.block()
-        val handler = builder.buildNew()
-        handlers.add(handler)
-    }
+//    fun <S: Any> subKonveyor(block: SubKonveyorBuilder<T, S>.() -> Unit) {
+//        val builder = SubKonveyorBuilder<T, S>()
+//        builder.block()
+//        val handler = builder.build()
+//        add(handler)
+//    }
 
 }
+

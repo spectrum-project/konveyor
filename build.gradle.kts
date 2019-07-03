@@ -31,7 +31,8 @@ buildscript {
 }
 
 plugins {
-    kotlin("multiplatform") version "1.3.20"
+    val kotlinVersion: String by project
+    kotlin("multiplatform") version kotlinVersion
     `maven-publish`
     id("com.jfrog.bintray") version "1.8.4"
     id("com.jfrog.artifactory") version "4.9.0"
@@ -318,33 +319,36 @@ kotlin {
     // linuxX64("linux")
 
     sourceSets {
+        val junit5Version: String by project
+        val coroutinesVersion: String by project
+        
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.2.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutinesVersion")
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.2.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutinesVersion")
             }
         }
         val jvmMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-jdk8"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
             }
         }
         val jvmTest by getting {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(kotlin("test-junit"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1")
-                implementation("org.junit.jupiter:junit-jupiter-api:5.3.2")
-                implementation("org.junit.jupiter:junit-jupiter-params:5.3.2")
-                implementation("org.junit.jupiter:junit-jupiter-engine:5.3.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+                implementation("org.junit.jupiter:junit-jupiter-api:$junit5Version")
+                implementation("org.junit.jupiter:junit-jupiter-params:$junit5Version")
+                implementation("org.junit.jupiter:junit-jupiter-engine:$junit5Version")
             }
         }
 //        val jsMain by getting {

@@ -16,37 +16,21 @@
  */
 package codes.spectrum.konveyor
 
-/**
- * The builder which builds Handler object
- *
- */
-@KonveyorTagMarker
-open class HandlerBuilder<T>: BaseBuilder<T>(), IHandlerBuilder<T> {
-
-    private var executor: KonveyorExecutorType<T> = { }
+interface IHandlerBuilder<T>: IBaseBuilder<T> {
 
     /**
-     * With this methos one can set the lambda for matcher [[IKonveyorHandler.match]] having access to
-     * [[IKonveyorEnvironment]] through lambda parameter to the handler
+     * With this methods one can set the lambda for executor [[IKonveyorHandler.exec]] to the handler
      */
-    override fun onEnv(block: KonveyorMatcherType<T>) {
-        matcher = block
+    fun exec(block: KonveyorExecutorShortType<T>) {
+        execEnv {
+            block()
+        }
     }
 
     /**
      * With this methods one can set the lambda for executor [[IKonveyorHandler.exec]] having access to
      * [[IKonveyorEnvironment]] through lambda parameter to the handler
      */
-    override fun execEnv(block: KonveyorExecutorType<T>) {
-        executor = block
-    }
+    fun execEnv(block: KonveyorExecutorType<T>)
 
-    /**
-     * Builds the [[IKonveyorHandler]] implementation
-     */
-    override fun build(): IKonveyorHandler<T> = KonveyorHandlerWrapper<T>(
-        matcher = matcher,
-        executor = executor,
-        timeout = timeout
-    )
 }

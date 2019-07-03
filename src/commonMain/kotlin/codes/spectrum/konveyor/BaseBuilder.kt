@@ -16,14 +16,17 @@
  */
 package codes.spectrum.konveyor
 
+import kotlinx.coroutines.TimeoutCancellationException
+
 /**
  * The builder which builds Handler object
  *
  */
 @KonveyorTagMarker
-open class HandlerBuilder<T>: BaseBuilder<T>(), IHandlerBuilder<T> {
+abstract class BaseBuilder<T>: IBaseBuilder<T> {
 
-    private var executor: KonveyorExecutorType<T> = { }
+    protected var matcher: KonveyorMatcherType<T> = { true }
+    protected var timeout: Long = 0L
 
     /**
      * With this methos one can set the lambda for matcher [[IKonveyorHandler.match]] having access to
@@ -34,19 +37,14 @@ open class HandlerBuilder<T>: BaseBuilder<T>(), IHandlerBuilder<T> {
     }
 
     /**
-     * With this methods one can set the lambda for executor [[IKonveyorHandler.exec]] having access to
-     * [[IKonveyorEnvironment]] through lambda parameter to the handler
+     * With this methods one can set timeout in millisecond([[Long]]) for handler and throw [[TimeoutCancellationException]] if time out
      */
-    override fun execEnv(block: KonveyorExecutorType<T>) {
-        executor = block
+    fun timeout(block: KonveyorTimeoutType) {
+        timeout = block()
     }
 
     /**
      * Builds the [[IKonveyorHandler]] implementation
      */
-    override fun build(): IKonveyorHandler<T> = KonveyorHandlerWrapper<T>(
-        matcher = matcher,
-        executor = executor,
-        timeout = timeout
-    )
+    abstract override fun build(): IKonveyorHandler<T>
 }

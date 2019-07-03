@@ -18,14 +18,12 @@ package codes.spectrum.konveyor
 
 import kotlin.coroutines.CoroutineContext
 
+fun <T: Any> konveyorBuilder(body: KonveyorBuilder<T>.() -> Unit ): KonveyorBuilder<T> = KonveyorBuilder<T>().apply(body)
+
 /**
  * Global method for creation of a conveyor
  */
-fun <T: Any> konveyor(body: KonveyorBuilder<T>.() -> Unit ): Konveyor<T> {
-    val builder = KonveyorBuilder<T>()
-    builder.body()
-    return builder.build()
-}
+fun <T: Any> konveyor(body: KonveyorBuilder<T>.() -> Unit ): Konveyor<T> = konveyorBuilder(body).build()
 
 /**
  * Global method for creation of a handler instance
