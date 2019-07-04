@@ -28,7 +28,7 @@ fun <T: Any> konveyor(body: KonveyorBuilder<T>.() -> Unit ): Konveyor<T> = konve
 /**
  * Global method for creation of a handler instance
  */
-fun <T> handler(body: HandlerBuilder<T>.() -> Unit ): IKonveyorHandler<T> {
+fun <T: Any> handler(body: HandlerBuilder<T>.() -> Unit ): IKonveyorHandler<T> {
     val builder = HandlerBuilder<T>()
     builder.body()
     return builder.build()

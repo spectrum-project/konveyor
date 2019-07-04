@@ -21,7 +21,7 @@ package codes.spectrum.konveyor
  *
  */
 @KonveyorTagMarker
-open class HandlerBuilder<T>: BaseBuilder<T>(), IHandlerBuilder<T> {
+open class HandlerBuilder<T: Any>: BaseBuilder<T>(), IHandlerBuilder<T> {
 
     private var executor: KonveyorExecutorType<T> = { }
 

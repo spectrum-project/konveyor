@@ -1,6 +1,5 @@
 package codes.spectrum.konveyor
 
-import kotlin.reflect.KCallable
 import kotlin.test.Test
 
 class KoveyorBuilderTest {
@@ -15,7 +14,7 @@ class KoveyorBuilderTest {
             exec {  }
             +konvBuilder
             +konvBuilder {
-                
+
             }
             handler {  }
             konveyor {  }

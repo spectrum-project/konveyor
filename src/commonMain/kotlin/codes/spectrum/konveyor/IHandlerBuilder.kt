@@ -16,7 +16,7 @@
  */
 package codes.spectrum.konveyor
 
-interface IHandlerBuilder<T>: IBaseBuilder<T> {
+interface IHandlerBuilder<T: Any>: IBaseBuilder<T> {
 
     /**
      * With this methods one can set the lambda for executor [[IKonveyorHandler.exec]] to the handler
