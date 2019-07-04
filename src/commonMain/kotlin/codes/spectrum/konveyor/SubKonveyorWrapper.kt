@@ -61,7 +61,6 @@ class SubKonveyorWrapper<T: Any, S: Any>(
                         send(context)
                     }
                 }
-                println("CONSUMERS: $consumers")
                 if (consumers > 1) {
                     repeat(consumers) {
                         launch { handlers.consumeEach { context.joiner(it, env) } }

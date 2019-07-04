@@ -1,5 +1,5 @@
 
-[ ![Download](https://api.bintray.com/packages/spectrum-project/konveyor/konveyor/images/download.svg?version=0.1.10) ](https://bintray.com/spectrum-project/konveyor/konveyor/0.1.10/link)
+[ ![Download](https://api.bintray.com/packages/spectrum-project/konveyor/konveyor/images/download.svg?version=0.2.1) ](https://bintray.com/spectrum-project/konveyor/konveyor/0.2.1/link)
 
 ![](https://img.shields.io/github/issues/spectrum-project/konveyor.svg)
 ![](https://img.shields.io/github/forks/spectrum-project/konveyor.svg)

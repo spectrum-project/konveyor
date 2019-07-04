@@ -66,14 +66,4 @@ class SubKonveyorBuilder<T: Any,S: Any>: BaseBuilder<T>(), IHandlerContainerBuil
         handlers.add(handler)
     }
 
-    fun exec(block: KonveyorExecutorShortType<S>) {
-        execEnv {
-            block()
-        }
-    }
-
-    fun execEnv(block: KonveyorExecutorType<S>) {
-        add(block)
-    }
-
 }
