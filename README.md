@@ -202,7 +202,7 @@ Add dependencies (you can also add other modules that you need):
 <dependency>
 	<groupId>codes.spectrum</groupId>
 	<artifactId>konveyor</artifactId>
-	<version>0.0.1</version>
+	<version>0.1.11</version>
 	<type>pom</type>
 </dependency>
 ```
@@ -213,7 +213,7 @@ Add dependencies (you can also add other modules that you need):
 
 ```groovy
 dependencies {
-    compile 'codes.spectrum:konveyor:0.0.1'
+    compile 'codes.spectrum:konveyor:0.1.11'
 }
 ```
 
@@ -230,7 +230,7 @@ Add dependencies (you can also add other modules that you need):
 
 ```kotlin
 dependencies {
-    implementation("codes.spectrum:konveyor:0.0.1")
+    implementation("codes.spectrum:konveyor:0.1.11")
 }
 ```
 

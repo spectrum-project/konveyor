@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.1.11 (23/08/2019)
+- Fixed: SubKonveyorWrapper does not call `handler.match()` before `handler.exec()`
+
 ## v0.1.0
 - IKonveyorEnvironment
 

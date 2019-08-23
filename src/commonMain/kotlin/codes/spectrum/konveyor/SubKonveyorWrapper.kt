@@ -25,7 +25,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 /**
  * SubKonveyor class that includes all workflow of the konveyor
  */
-class SubKonveyorWrapper<T: Any, S: Any>(
+class SubKonveyorWrapper<T : Any, S : Any>(
     private val matcher: KonveyorMatcherType<T> = { true },
     private val handlers: Collection<IKonveyorHandler<S>> = mutableListOf(),
     private val splitter: SubKonveyorSplitterType<T, S> = { sequence { } },
@@ -47,7 +47,7 @@ class SubKonveyorWrapper<T: Any, S: Any>(
                 context
                     .splitter(env)
                     .forEach { s ->
-                        handlers.forEach { handler -> handler.exec(s, env) }
+                        handlers.forEach { handler -> if (handler.match(s, env)) handler.exec(s, env) }
                         context.joiner(s, env)
                     }
             } else {
@@ -57,7 +57,7 @@ class SubKonveyorWrapper<T: Any, S: Any>(
 
                 val handlers = produce(capacity = bSize) {
                     for (context in src) {
-                        handlers.forEach { handler -> handler.exec(context, env) }
+                        handlers.forEach { handler -> if (handler.match(context, env)) handler.exec(context, env) }
                         send(context)
                     }
                 }
