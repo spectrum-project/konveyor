@@ -9,11 +9,11 @@ class HandlerTest {
     fun createTest() {
         val h1 = handler<MyContext> {
             on { true }
-            exec { value+=100 }
+            exec { value += 100 }
         }
         val h2 = handler<MyContext> {
             on { false }
-            exec { value+=120 }
+            exec { value += 120 }
         }
 
         val konv = konveyor<MyContext> {
@@ -30,4 +30,51 @@ class HandlerTest {
         var value: Int = 0
     )
 
+    @Test
+    fun handlerMatchTest() {
+        val konveyor = konveyor<MyContext> {
+            exec {
+                value = 41
+            }
+
+            +MyHandler
+            exec { assertEquals(-1, value) }
+
+            +MyHandler
+            exec { assertEquals(-1, value) }
+        }
+
+        runMultiplatformBlocking { konveyor.exec(MyContext()) }
+    }
+
+    @Test
+    fun subKonveyorHandlerMatchTest() {
+        val konveyor = konveyor<MyContext> {
+            exec {
+                value = 41
+            }
+
+            subKonveyor<MyContext> {
+                split {
+                    sequenceOf(this)
+                }
+
+                +MyHandler
+                exec { assertEquals(-1, value) }
+
+                +MyHandler
+                exec { assertEquals(-1, value) }
+            }
+        }
+
+        runMultiplatformBlocking { konveyor.exec(MyContext()) }
+    }
+
+    internal object MyHandler : IKonveyorHandler<MyContext> {
+        override fun match(context: MyContext, env: IKonveyorEnvironment): Boolean = context.value >= 0
+
+        override suspend fun exec(context: MyContext, env: IKonveyorEnvironment) {
+            context.value -= 42
+        }
+    }
 }
